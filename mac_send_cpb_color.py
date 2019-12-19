@@ -6,7 +6,7 @@
 # in a local directory called adafruit_bluefruit_connect to import that
 #
 
-# sends a color value to the CircuitPlaground Bluefruit (CPB) and
+# sends a color value to the Circuit Plaground Bluefruit (CPB) and
 # waits for the CPB to send a (light) value back
 #
 import Adafruit_BluefruitLE
