@@ -23,8 +23,6 @@ while True:
         pass
     ble.stop_advertising()
 
-    test = 0
-
     while ble.connected:
         packet = Packet.from_stream(uart_server)
         if isinstance(packet, ColorPacket):
