@@ -1,6 +1,7 @@
 # CircuitPython recieve a color via BLE
 
 import board
+import analogio
 import neopixel
 from adafruit_ble import BLERadio
 from adafruit_ble.advertising.standard import ProvideServicesAdvertisement
@@ -8,6 +9,7 @@ from adafruit_ble.services.nordic import UARTService
 from adafruit_bluefruit_connect.packet import Packet
 from adafruit_bluefruit_connect.color_packet import ColorPacket
 
+light = analogio.AnalogIn(board.LIGHT)
 ble = BLERadio()
 uart_server = UARTService()
 advertisement = ProvideServicesAdvertisement(uart_server)
@@ -21,7 +23,7 @@ while True:
         pass
     ble.stop_advertising()
 
-    test = 1
+    test = 0
 
     while ble.connected:
         packet = Packet.from_stream(uart_server)
@@ -29,8 +31,8 @@ while True:
             if packet.color != None:
                 print(packet.color)
                 print(packet.to_bytes())
-                test = test + 1
-                message = b'hello world from CPB {0}'.format(str(test))
+                brightness = light.value
+                message = str(brightness)
                 uart_server.write(message)
                 print(message)
-            pixels.fill(packet.color)
+                pixels.fill(packet.color)
