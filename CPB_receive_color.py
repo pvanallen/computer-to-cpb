@@ -1,4 +1,6 @@
 # CircuitPython recieve a color via BLE
+# adapted from https://learn.adafruit.com/adafruit-circuit-playground-bluefruit/playground-color-picker
+# Philip van Allen
 
 import board
 import analogio
@@ -26,11 +28,14 @@ while True:
     while ble.connected:
         packet = Packet.from_stream(uart_server)
         if isinstance(packet, ColorPacket):
-            if packet.color != None:
+            if packet.color != None
+                # display packet that came in from computer
                 print(packet.color)
                 print(packet.to_bytes())
+                # set all NeoPixels to the received color
+                pixels.fill(packet.color)
+                # send the current light value
                 brightness = light.value
                 message = str(brightness)
                 uart_server.write(message)
                 print(message)
-                pixels.fill(packet.color)
