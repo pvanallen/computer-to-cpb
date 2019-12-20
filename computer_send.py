@@ -45,6 +45,7 @@ def main():
 
     # Scan for UART devices.
     print('Searching for UART device...')
+    connect_to = "yourUniqueName"
     try:
         adapter.start_scan()
         # Search for the first UART device found (will time out after 60 seconds
@@ -56,49 +57,52 @@ def main():
         # Make sure scanning is stopped before exiting.
         adapter.stop_scan()
 
-    print('Connecting to device...' + device.name)
-    device.connect()  # Will time out after 60 seconds, specify timeout_sec parameter
-                      # to change the timeout.
+    # make sure we connect to the device we want
+    if device.name == connect_to:
+        print('Connecting to device...' + device.name)
+        device.connect()  # Will time out after 60 seconds, specify timeout_sec parameter
+                          # to change the timeout.
 
-    # Once connected do everything else in a try/finally to make sure the device
-    # is disconnected when done.
-    try:
-        # Wait for service discovery to complete for the UART service.  Will
-        # time out after 60 seconds (specify timeout_sec parameter to override).
-        print('Discovering services...')
-        UART.discover(device)
+        # Once connected do everything else in a try/finally to make sure the device
+        # is disconnected when done.
+        try:
+            # Wait for service discovery to complete for the UART service.  Will
+            # time out after 60 seconds (specify timeout_sec parameter to override).
+            print('Discovering services...')
+            UART.discover(device)
 
-        # Once service discovery is complete create an instance of the service
-        # and start interacting with it.
-        uart = UART(device)
+            # Once service discovery is complete create an instance of the service
+            # and start interacting with it.
+            uart = UART(device)
 
-        # packets are documented here https://learn.adafruit.com/bluefruit-le-connect/controller
-        # color_packet_blue = b'!C\x00I\xffS'
-        # color_packet_red = b'!C\xff\x02\x08\x92'
-        light_value = 0
-        while True:
-            # build a random color
-            if light_value > 10000:
-                print("BRIGHT " + str(light_value))
-                color_packet = ColorPacket((255,0, 0))
-            else:
-                print("DIM " + str(light_value))
-                color_packet = ColorPacket((randint(0, 255),randint(0, 255),255))
-            uart.write(color_packet.to_bytes())
-            print("Sent color packet to the device.")
-            time.sleep(0.2)
-            print('Waiting up to 4 seconds to receive data from the device...')
-            received = uart.read(timeout_sec=4)
-            if received is not None:
-                # Received data, print it out.
-                light_value = int(received)
-            else:
-                # Timeout waiting for data, None is returned.
-                print('Received no data!')
-    finally:
-        # Make sure device is disconnected on exit.
-        device.disconnect()
-
+            # packets are documented here https://learn.adafruit.com/bluefruit-le-connect/controller
+            # color_packet_blue = b'!C\x00I\xffS'
+            # color_packet_red = b'!C\xff\x02\x08\x92'
+            light_value = 0
+            while True:
+                # build a random color
+                if light_value > 10000:
+                    print("BRIGHT " + str(light_value))
+                    color_packet = ColorPacket((255,0, 0))
+                else:
+                    print("DIM " + str(light_value))
+                    color_packet = ColorPacket((randint(0, 255),randint(0, 255),255))
+                uart.write(color_packet.to_bytes())
+                print("Sent color packet to the device.")
+                time.sleep(0.2)
+                print('Waiting up to 4 seconds to receive data from the device...')
+                received = uart.read(timeout_sec=4)
+                if received is not None:
+                    # Received data, print it out.
+                    light_value = int(received)
+                else:
+                    # Timeout waiting for data, None is returned.
+                    print('Received no data!')
+        finally:
+            # Make sure device is disconnected on exit.
+            device.disconnect()
+    else:
+        print("Not connecting to first device found: " + device.name)
 
 # Initialize the BLE system.  MUST be called before other BLE calls!
 ble.initialize()
