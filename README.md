@@ -4,7 +4,7 @@ This is an example set of code that runs on a computer (tested on Mac, might wor
 It will display RED on the NEOPIXELs if there is bright light, and random colors otherwise.
 
 ### Dependencies
-* [cpb_receive.py](https://github.com/pvanallen/computer-to-cpb/blob/master/cpb_receive_color.py) tested on the CPB with
+* [cpb_receive.py](https://github.com/pvanallen/computer-to-cpb/blob/master/cpb_receive.py) tested on the CPB with
   * [Circuit Python libraries v5](https://circuitpython.org/libraries)
   * [Circuit Python v5.0.0 Beta 1](https://circuitpython.org/board/circuitplayground_bluefruit/)
 * [computer_send.py](https://github.com/pvanallen/computer-to-cpb/blob/master/computer_send.py) is tested on MacOS 10.15.2 after installing
