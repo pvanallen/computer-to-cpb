@@ -31,7 +31,7 @@ ble = Adafruit_BluefruitLE.get_provider()
 def main():
     # Clear any cached data because both bluez and CoreBluetooth have issues with
     # caching data and it going stale.
-    ble.clear_cached_data()
+    #ble.clear_cached_data() #enabling this will means any BLE devices get disconnected from computer
 
     # Get the first available BLE network adapter and make sure it's powered on.
     adapter = ble.get_default_adapter()
