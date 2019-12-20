@@ -11,12 +11,12 @@ from adafruit_ble.services.nordic import UARTService
 from adafruit_bluefruit_connect.packet import Packet
 from adafruit_bluefruit_connect.color_packet import ColorPacket
 
-light = analogio.AnalogIn(board.LIGHT)
 ble = BLERadio()
 uart_server = UARTService()
 advertisement = ProvideServicesAdvertisement(uart_server)
 
 pixels = neopixel.NeoPixel(board.NEOPIXEL, 10, brightness=0.1)
+light = analogio.AnalogIn(board.LIGHT)
 
 while True:
     # Advertise when not connected.
