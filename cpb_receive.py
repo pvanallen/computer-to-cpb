@@ -12,6 +12,7 @@ from adafruit_bluefruit_connect.packet import Packet
 from adafruit_bluefruit_connect.color_packet import ColorPacket
 
 ble = BLERadio()
+ble.name = "yourUniqueName"
 uart_server = UARTService()
 advertisement = ProvideServicesAdvertisement(uart_server)
 
@@ -28,7 +29,7 @@ while True:
     while ble.connected:
         packet = Packet.from_stream(uart_server)
         if isinstance(packet, ColorPacket):
-            if packet.color != None
+            if packet.color != None:
                 # display packet that came in from computer
                 print(packet.color)
                 print(packet.to_bytes())
